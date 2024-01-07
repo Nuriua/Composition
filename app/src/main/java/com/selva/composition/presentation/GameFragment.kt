@@ -20,9 +20,12 @@ import com.selva.composition.domain.entity.Level
 class GameFragment : Fragment() {
 
     private lateinit var level: Level
+
+    private val viewModelFactory by lazy {
+        GameViewModelFactory(level, requireActivity().application)
+    }
     private val viewModel: GameViewModel by lazy {
-        ViewModelProvider(this, AndroidViewModelFactory.getInstance(requireActivity().application)
-        )[GameViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[GameViewModel::class.java]
     }
 
     private val tvOptions by lazy {
@@ -119,7 +122,7 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun launchGameFinishedFragment(gameResult: GameResult){
+    private fun launchGameFinishedFragment(gameResult: GameResult) {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.main_container, GameFinishedFragment.newInstance(gameResult))
             .addToBackStack(null)
